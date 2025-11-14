@@ -213,7 +213,7 @@ return (
             <div className="w-full bg-gray-700 rounded-full h-3">
               <div 
                 className="bg-gradient-to-r from-green-400 to-emerald-400 h-3 rounded-full transition-all duration-500"
-                style={{ width: ${progress}% }}
+                style={{ width: `${progress}%` }}
               />
             </div>
           </div>
@@ -624,3 +624,4 @@ return (
 };
 
 export default UCEEDPreparationTracker;
+
