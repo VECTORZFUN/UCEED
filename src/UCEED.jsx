@@ -11,7 +11,6 @@ const UCEEDPreparationTracker = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Load data from storage on mount
   useEffect(() => {
     loadData();
   }, []);
@@ -19,14 +18,10 @@ const UCEEDPreparationTracker = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      
-      // Load completed days
       const daysResult = await window.storage.get('uceed-completed-days');
       if (daysResult && daysResult.value) {
         setCompletedDays(JSON.parse(daysResult.value));
       }
-      
-      // Load mock tests
       const testsResult = await window.storage.get('uceed-mock-tests');
       if (testsResult && testsResult.value) {
         setMockTests(JSON.parse(testsResult.value));
@@ -180,9 +175,8 @@ const UCEEDPreparationTracker = () => {
     );
   }
 
-  return (
+return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 md:p-8">
-      {/* Saving Indicator */}
       {saving && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg z-50">
           <Save size={18} className="animate-pulse" />
@@ -190,7 +184,6 @@ const UCEEDPreparationTracker = () => {
         </div>
       )}
 
-      {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
@@ -210,7 +203,6 @@ const UCEEDPreparationTracker = () => {
           </p>
         </div>
 
-        {/* Progress Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
             <div className="flex items-center gap-3 mb-2">
@@ -246,9 +238,7 @@ const UCEEDPreparationTracker = () => {
         </div>
       </div>
 
-      {/* Weekly Plans */}
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Mock Test Progress Graph */}
         {mockTests.length > 0 && (
           <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-6 border border-white/10">
             <div className="flex items-center justify-between mb-6">
@@ -260,7 +250,6 @@ const UCEEDPreparationTracker = () => {
               </div>
             </div>
 
-            {/* Graph */}
             <div className="bg-white/10 rounded-2xl p-4 mb-6">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={mockTests}>
@@ -311,7 +300,6 @@ const UCEEDPreparationTracker = () => {
               </ResponsiveContainer>
             </div>
 
-            {/* Test History */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               {mockTests.map((test, idx) => (
                 <div key={idx} className="bg-white/5 rounded-xl p-4 border border-white/10 relative group">
@@ -340,7 +328,6 @@ const UCEEDPreparationTracker = () => {
               ))}
             </div>
 
-            {/* Add Test Button */}
             {!showAddTest && (
               <button
                 onClick={() => setShowAddTest(true)}
@@ -351,7 +338,6 @@ const UCEEDPreparationTracker = () => {
               </button>
             )}
 
-            {/* Add Test Form */}
             {showAddTest && (
               <div className="bg-white/10 rounded-xl p-6 border border-white/20">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -414,131 +400,227 @@ const UCEEDPreparationTracker = () => {
               </div>
             )}
 
-            {/* Statistics */}
             {mockTests.length >= 2 && (
               <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl p-4 border border-cyan-500/30">
                   <div className="text-cyan-400 text-sm font-semibold mb-1">Part A Improvement</div>
                   <div className="text-white text-2xl font-black">
-<div className="flex items-center justify-between mb-3">
-  <div className="flex items-center gap-2">
-    <Calendar className="text-white" size={18} />
-    <span className="font-black text-white text-lg">DAY {dayData.day}</span>
-  </div>
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      toggleDay(dayData.day);
-    }}
-    className="transition-transform hover:scale-110"
-  >
-    {isCompleted ? (
-      <CheckCircle className="text-white" size={24} />
-    ) : (
-      <Circle className="text-white/50" size={24} />
-    )}
-  </button>
-</div>
-
-<div className="space-y-2">
-  {dayData.tasks.slice(0, isSelected ? undefined : 2).map((task, idx) => (
-    <div key={idx} className="flex items-start gap-2 text-xs text-white/90">
-      <div className="min-w-1 w-1 h-1 rounded-full bg-white/70 mt-1.5" />
-      <span>{task}</span>
-    </div>
-  ))}
-  {!isSelected && dayData.tasks.length > 2 && (
-    <div className="text-xs text-white/60 italic">
-      +{dayData.tasks.length - 2} more tasks...
-    </div>
-  )}
-</div>
-
-{dayData.drawing && (
-  <div className="mt-3 flex items-center gap-1 text-xs text-white/80">
-    <Clock size={14} />
-    <span>Drawing Practice</span>
-  </div>
-)}
-jsx
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleDay(dayData.day);
-                      }}
-                      className="transition-transform hover:scale-110"
-                    >
-                      {isCompleted ? (
-                        <CheckCircle className="text-white" size={24} />
-                      ) : (
-                        <Circle className="text-white/50" size={24} />
-                      )}
-                    </button>
+                    +{(mockTests[mockTests.length - 1].partA - mockTests[0].partA).toFixed(1)}
                   </div>
+                  <div className="text-gray-300 text-xs mt-1">
+                    {mockTests[0].partA} → {mockTests[mockTests.length - 1].partA}
+                  </div>
+                </div>
+                <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl p-4 border border-orange-500/30">
+                  <div className="text-orange-400 text-sm font-semibold mb-1">Part B Improvement</div>
+                  <div className="text-white text-2xl font-black">
+                    +{(mockTests[mockTests.length - 1].partB - mockTests[0].partB).toFixed(1)}
+                  </div>
+                  <div className="text-gray-300 text-xs mt-1">
+                    {mockTests[0].partB} → {mockTests[mockTests.length - 1].partB}
+                  </div>
+                </div>
+                <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-4 border border-green-500/30">
+                  <div className="text-green-400 text-sm font-semibold mb-1">Total Improvement</div>
+                  <div className="text-white text-2xl font-black">
+                    +{(mockTests[mockTests.length - 1].total - mockTests[0].total).toFixed(1)}
+                  </div>
+                  <div className="text-gray-300 text-xs mt-1">
+                    {mockTests[0].total} → {mockTests[mockTests.length - 1].total}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
-                  <div className="space-y-2">
-                    {dayData.tasks.slice(0, isSelected ? undefined : 2).map((task, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-white/90">
-                        <div className="min-w-1 w-1 h-1 rounded-full bg-white/70 mt-1.5" />
-                        <span>{task}</span>
+
+        {mockTests.length === 0 && (
+          <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10 text-center">
+            <BarChart3 className="text-cyan-400 mx-auto mb-4" size={48} />
+            <h3 className="text-xl font-bold text-white mb-2">Track Your Mock Test Progress</h3>
+            <p className="text-gray-400 mb-6">Add your mock test scores to see your improvement over time</p>
+            <button
+              onClick={() => setShowAddTest(true)}
+              className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-xl inline-flex items-center gap-2 transition-all"
+            >
+              <PlusCircle size={20} />
+              Add Your First Mock Test
+            </button>
+            {showAddTest && (
+              <div className="bg-white/10 rounded-xl p-6 border border-white/20 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="block text-white text-sm font-semibold mb-2">Day (1-30)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="30"
+                      value={newTest.day}
+                      onChange={(e) => setNewTest({...newTest, day: e.target.value})}
+                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-400"
+                      placeholder="Day"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white text-sm font-semibold mb-2">Part A (Max: 200)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="200"
+                      step="0.5"
+                      value={newTest.partA}
+                      onChange={(e) => setNewTest({...newTest, partA: e.target.value})}
+                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-400"
+                      placeholder="Part A Score"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white text-sm font-semibold mb-2">Part B (Max: 100)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.5"
+                      value={newTest.partB}
+                      onChange={(e) => setNewTest({...newTest, partB: e.target.value})}
+                      className="w-full bg-white/10 text-white border border-white/20 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-400"
+                      placeholder="Part B Score"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={addMockTest}
+                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-2 px-6 rounded-lg transition-all"
+                  >
+                    Save Test
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAddTest(false);
+                      setNewTest({ day: '', partA: '', partB: '' });
+                    }}
+                    className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2 px-6 rounded-lg transition-all"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {weeks.map((week) => (
+          <div key={week.week} className="bg-white/5 backdrop-blur-lg rounded-3xl p-6 border border-white/10">
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-2">
+                <Star className="text-yellow-400" size={24} />
+                <h2 className="text-2xl md:text-3xl font-black text-white">
+                  WEEK {week.week}: {week.title}
+                </h2>
+              </div>
+              <p className={text-sm md:text-base font-semibold bg-gradient-to-r ${week.color} bg-clip-text text-transparent}>
+                {week.goal}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {week.days.map((dayData) => {
+                const isCompleted = completedDays.includes(dayData.day);
+                const isSelected = selectedDay === dayData.day;
+                
+                return (
+                  <div
+                    key={dayData.day}
+                    onClick={() => setSelectedDay(isSelected ? null : dayData.day)}
+                    className={`relative rounded-2xl p-4 border-2 transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                      isCompleted 
+                        ? bg-gradient-to-br ${week.color} border-white/40 shadow-lg 
+                        : 'bg-white/5 border-white/10 hover:border-white/30'
+                    } ${isSelected ? 'ring-4 ring-white/50' : ''}`}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="text-white" size={18} />
+                        <span className="font-black text-white text-lg">DAY {dayData.day}</span>
                       </div>
-                    ))}
-                    {!isSelected && dayData.tasks.length > 2 && (
-                      <div className="text-xs text-white/60 italic">
-                        +{dayData.tasks.length - 2} more tasks...
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleDay(dayData.day);
+                        }}
+                        className="transition-transform hover:scale-110"
+                      >
+                        {isCompleted ? (
+                          <CheckCircle className="text-white" size={24} />
+                        ) : (
+                          <Circle className="text-white/50" size={24} />
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      {dayData.tasks.slice(0, isSelected ? undefined : 2).map((task, idx) => (
+                        <div key={idx} className="flex items-start gap-2 text-xs text-white/90">
+                          <div className="min-w-1 w-1 h-1 rounded-full bg-white/70 mt-1.5" />
+                          <span>{task}</span>
+                        </div>
+                      ))}
+                      {!isSelected && dayData.tasks.length > 2 && (
+                        <div className="text-xs text-white/60 italic">
+                          +{dayData.tasks.length - 2} more tasks...
+                        </div>
+                      )}
+                    </div>
+
+                    {dayData.drawing && (
+                      <div className="mt-3 flex items-center gap-1 text-xs text-white/80">
+                        <Clock size={14} />
+                        <span>Drawing Practice</span>
                       </div>
                     )}
                   </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
 
-                  {dayData.drawing && (
-                    <div className="mt-3 flex items-center gap-1 text-xs text-white/80">
-                      <Clock size={14} />
-                      <span>Drawing Practice</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+      <div className="max-w-7xl mx-auto mt-12 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-3xl p-8 border-2 border-yellow-500/30">
+        <h3 className="text-3xl font-black text-white mb-6 text-center">
+          🔥 EXPECTED RESULTS
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center">
+            <div className="text-sm text-gray-300 mb-2">Part A</div>
+            <div className="text-4xl font-black text-white mb-1">95 → 145</div>
+            <div className="text-sm text-yellow-400">+50 marks</div>
+          </div>
+          <div className="text-center">
+            <div className="text-sm text-gray-300 mb-2">Part B</div>
+            <div className="text-4xl font-black text-white mb-1">55 → 75</div>
+            <div className="text-sm text-yellow-400">+20 marks</div>
+          </div>
+          <div className="text-center">
+            <div className="text-sm text-gray-300 mb-2">Total</div>
+            <div className="text-4xl font-black text-white mb-1">190-210+</div>
+            <div className="text-sm text-yellow-400">AIR &lt;30 Level</div>
           </div>
         </div>
-      ))}
-    </div>
-
-    {/* Results Section */}
-    <div className="max-w-7xl mx-auto mt-12 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-3xl p-8 border-2 border-yellow-500/30">
-      <h3 className="text-3xl font-black text-white mb-6 text-center">
-        🔥 EXPECTED RESULTS
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="text-center">
-          <div className="text-sm text-gray-300 mb-2">Part A</div>
-          <div className="text-4xl font-black text-white mb-1">95 → 145</div>
-          <div className="text-sm text-yellow-400">+50 marks</div>
-        </div>
-        <div className="text-center">
-          <div className="text-sm text-gray-300 mb-2">Part B</div>
-          <div className="text-4xl font-black text-white mb-1">55 → 75</div>
-          <div className="text-sm text-yellow-400">+20 marks</div>
-        </div>
-        <div className="text-center">
-          <div className="text-sm text-gray-300 mb-2">Total</div>
-          <div className="text-4xl font-black text-white mb-1">190-210+</div>
-          <div className="text-sm text-yellow-400">AIR &lt;30 Level</div>
-        </div>
+        <p className="text-center text-white/80 mt-6 text-sm">
+          With a good Part B, <span className="font-bold text-yellow-400">AIR &lt;15 is possible</span>
+        </p>
       </div>
-      <p className="text-center text-white/80 mt-6 text-sm">
-        With a good Part B, <span className="font-bold text-yellow-400">AIR &lt;15 is possible</span>
-      </p>
-    </div>
 
-    {/* Footer Note */}
-    <div className="max-w-7xl mx-auto mt-8 text-center">
-      <p className="text-gray-400 text-sm">
-        Click on any day to expand details | Click the circle to mark complete
-      </p>
+      <div className="max-w-7xl mx-auto mt-8 text-center">
+        <p className="text-gray-400 text-sm">
+          Click on any day to expand details | Click the circle to mark complete
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default UCEEDPreparationTracker;
